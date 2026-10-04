@@ -1,0 +1,495 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#6d5dfc">
+<title>HÓA 12 — QUIZ LAB</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&family=Poppins:wght@700;800;900&display=swap');
+:root{
+  --blue:#39bdf8;--cyan:#25d9d0;--purple:#7967ff;--pink:#ff6fb5;--yellow:#ffd65a;
+  --orange:#ff9f43;--green:#32d583;--red:#ff5f6d;--ink:#17203a;--muted:#64708b;
+  --white:#fff;--shadow:0 20px 60px rgba(55,49,130,.16);--radius:26px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;font-family:"Be Vietnam Pro",system-ui,sans-serif;color:var(--ink)}
+body{
+  overflow-x:hidden;
+  background:
+    radial-gradient(circle at 8% 8%,rgba(57,189,248,.34),transparent 26%),
+    radial-gradient(circle at 91% 9%,rgba(255,111,181,.27),transparent 25%),
+    radial-gradient(circle at 72% 92%,rgba(121,103,255,.25),transparent 28%),
+    linear-gradient(135deg,#f6fbff 0%,#f7f4ff 45%,#fff8fb 100%);
+}
+button{font:inherit}
+button:focus-visible{outline:4px solid rgba(37,217,208,.35);outline-offset:3px}
+.hidden{display:none!important}
+
+/* Ambient background */
+.bg{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:0}
+.blob,.particle,.science{position:absolute}
+.blob{border-radius:50%;filter:blur(2px);opacity:.5;animation:float 10s ease-in-out infinite}
+.b1{width:310px;height:310px;left:-120px;top:28%;background:linear-gradient(135deg,#67e8f9,#818cf8)}
+.b2{width:250px;height:250px;right:-90px;top:45%;background:linear-gradient(135deg,#f9a8d4,#fde68a);animation-delay:-3s}
+.b3{width:190px;height:190px;right:20%;bottom:-100px;background:linear-gradient(135deg,#86efac,#67e8f9);animation-delay:-6s}
+.particle{width:7px;height:7px;border-radius:50%;background:#fff;box-shadow:0 0 12px rgba(121,103,255,.65);opacity:.7;animation:rise 8s linear infinite}
+.p1{left:18%;bottom:-20px}.p2{left:36%;bottom:-50px;animation-delay:1.8s}.p3{left:62%;bottom:-20px;animation-delay:3s}.p4{left:82%;bottom:-70px;animation-delay:4.4s}
+.science{font-size:25px;opacity:.22;animation:float 7s ease-in-out infinite}
+.sci1{left:4%;top:17%}.sci2{right:5%;top:24%;animation-delay:-2s}.sci3{left:8%;bottom:13%;animation-delay:-4s}.sci4{right:10%;bottom:15%;animation-delay:-5s}
+@keyframes float{0%,100%{transform:translate(0,0) rotate(0)}50%{transform:translate(18px,-18px) rotate(5deg)}}
+@keyframes rise{from{transform:translateY(0);opacity:0}15%{opacity:.7}to{transform:translateY(-110vh);opacity:0}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important}}
+
+/* App shell */
+.app{position:relative;z-index:1;width:min(1120px,94vw);margin:auto;padding:22px 0 46px}
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:14px;margin-bottom:16px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:900;color:#4f46c9}
+.brand-mark{width:44px;height:44px;border-radius:15px;display:grid;place-items:center;background:linear-gradient(135deg,#39bdf8,#7967ff 55%,#ff6fb5);color:#fff;box-shadow:0 10px 25px rgba(121,103,255,.25);font-size:23px}
+.icon-btn{border:1px solid rgba(121,103,255,.18);background:rgba(255,255,255,.72);backdrop-filter:blur(12px);width:44px;height:44px;border-radius:14px;cursor:pointer;box-shadow:0 7px 22px rgba(55,49,130,.08);transition:.2s}
+.icon-btn:hover{transform:translateY(-2px) scale(1.04);background:#fff}
+.glass{background:rgba(255,255,255,.78);backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.9);box-shadow:var(--shadow);border-radius:var(--radius)}
+
+/* Start screen */
+.start{padding:34px;overflow:hidden;position:relative}
+.start-grid{display:grid;grid-template-columns:1.08fr .92fr;gap:30px;align-items:center}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;padding:8px 13px;border-radius:999px;background:#eef2ff;color:#5b4bd8;font-size:12px;font-weight:900}
+.start h1{font-family:Poppins,sans-serif;font-size:clamp(40px,6vw,72px);line-height:1.02;margin:16px 0 12px;letter-spacing:-2px}
+.gradient-text{background:linear-gradient(90deg,#1d9bf0,#6d5dfc,#ed5fa9);-webkit-background-clip:text;background-clip:text;color:transparent}
+.start p{font-size:17px;line-height:1.7;color:var(--muted);max-width:650px;margin:0}
+.start-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:25px}
+.primary,.secondary{
+  border:0;border-radius:17px;padding:15px 22px;font-weight:900;cursor:pointer;transition:.2s;position:relative;overflow:hidden
+}
+.primary{color:#fff;background:linear-gradient(100deg,#23bff2,#6d5dfc 55%,#ef62aa);box-shadow:0 13px 30px rgba(109,93,252,.28)}
+.primary:hover{transform:translateY(-3px) scale(1.02);box-shadow:0 17px 34px rgba(109,93,252,.34)}
+.secondary{background:#fff;color:#4f46c9;border:1px solid #e6e5ff}
+.secondary:hover{transform:translateY(-2px);background:#f8f7ff}
+.ripple{position:absolute;border-radius:50%;background:rgba(255,255,255,.5);transform:scale(0);animation:ripple .55s linear;pointer-events:none}
+@keyframes ripple{to{transform:scale(4);opacity:0}}
+.hero-lab{min-height:300px;border-radius:30px;position:relative;overflow:hidden;background:linear-gradient(135deg,#dff8ff,#eee8ff 55%,#ffe5f2);border:1px solid #fff;box-shadow:inset 0 0 60px rgba(255,255,255,.7)}
+.hero-lab:before{content:"";position:absolute;inset:0;background-image:radial-gradient(#fff 1px,transparent 1px);background-size:20px 20px;opacity:.5}
+.lab-title{position:absolute;left:24px;top:20px;font-weight:900;color:#6256d9}
+.big-flask{position:absolute;left:23%;top:23%;font-size:100px;filter:drop-shadow(0 16px 13px rgba(75,65,170,.2));animation:float 4s ease-in-out infinite}
+.big-atom{position:absolute;right:10%;top:12%;font-size:72px;color:#6d5dfc;filter:drop-shadow(0 8px 10px rgba(109,93,252,.2));animation:spinFloat 8s ease-in-out infinite}
+.tube-art{position:absolute;right:23%;bottom:13%;width:38px;height:112px;border:4px solid #7c6ff0;border-top:0;border-radius:0 0 22px 22px;transform:rotate(13deg);background:linear-gradient(to top,#9b8cff 0 35%,transparent 35%);box-shadow:0 10px 18px rgba(109,93,252,.12)}
+.tube-art:before{content:"";position:absolute;left:-7px;top:-4px;width:44px;height:10px;border-radius:10px;background:#fff;border:3px solid #7c6ff0}
+.molecule-art{position:absolute;left:8%;bottom:12%;width:140px;height:100px}
+.molecule-art i{position:absolute;width:25px;height:25px;border-radius:50%;box-shadow:0 0 18px currentColor}
+.molecule-art i:nth-child(1){left:8px;top:36px;background:#38bdf8;color:#38bdf8}.molecule-art i:nth-child(2){left:57px;top:5px;background:#ff78b7;color:#ff78b7}.molecule-art i:nth-child(3){right:5px;top:42px;background:#ffd85a;color:#ffd85a}.molecule-art i:nth-child(4){left:58px;bottom:3px;background:#5cdb91;color:#5cdb91}
+.molecule-art:before,.molecule-art:after{content:"";position:absolute;height:5px;background:#a5b4fc;left:25px;top:47px;width:80px;transform:rotate(-28deg);border-radius:99px}.molecule-art:after{transform:rotate(29deg)}
+.stat-pills{display:flex;gap:8px;flex-wrap:wrap;margin-top:20px}
+.pill{padding:8px 11px;border-radius:999px;background:#fff;font-size:12px;font-weight:800;color:#556078;box-shadow:0 5px 14px rgba(55,49,130,.08)}
+@keyframes spinFloat{50%{transform:rotate(12deg) translateY(-12px)}}
+
+/* Quiz header */
+.quiz-head{display:grid;grid-template-columns:1fr auto;gap:14px;align-items:center;margin-bottom:14px}
+.question-count{font-weight:900;color:#4b5570;font-size:14px}
+.progress-wrap{margin-top:8px;height:12px;border-radius:99px;background:#e9ebf7;overflow:hidden;box-shadow:inset 0 2px 4px rgba(55,49,130,.06)}
+.progress{height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,#27c6f5,#7468ff,#ff70b7);transition:width .35s ease;box-shadow:0 0 16px rgba(109,93,252,.25)}
+.hud{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.hud-item{display:flex;align-items:center;gap:6px;padding:9px 12px;border-radius:14px;background:#fff;border:1px solid #ececff;box-shadow:0 7px 20px rgba(55,49,130,.07);font-weight:900;font-size:13px}
+.hud-item.combo{color:#e26a15;background:#fff7e8}.hud-item.timer{color:#4260bd}.timer.danger{color:#e43e51;background:#fff0f2;animation:pulse .8s ease-in-out infinite}
+@keyframes pulse{50%{transform:scale(1.05)}}
+
+/* Question card */
+.question-card{padding:22px;position:relative;overflow:hidden}
+.question-card.enter{animation:cardIn .32s ease}
+@keyframes cardIn{from{opacity:0;transform:translateY(12px) scale(.985)}to{opacity:1;transform:none}}
+.q-top{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:14px}
+.badge{display:inline-flex;align-items:center;gap:7px;padding:8px 12px;border-radius:12px;color:#fff;font-size:12px;font-weight:900;background:linear-gradient(100deg,#6d5dfc,#a56cff)}
+.source-badge{font-size:11px;color:#7b849a;background:#f4f5fb;border-radius:10px;padding:7px 9px;font-weight:800}
+.question-visual{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:66px;padding:10px 14px;border-radius:18px;background:linear-gradient(90deg,#e8faff,#f0edff 52%,#fff0f7);border:1px solid #fff;margin-bottom:16px;overflow:hidden}
+.visual-icons{display:flex;align-items:center;gap:7px;font-size:26px}
+.visual-icons span{display:grid;place-items:center;width:40px;height:40px;border-radius:13px;background:rgba(255,255,255,.75);box-shadow:0 5px 14px rgba(55,49,130,.06);animation:float 3.2s ease-in-out infinite}
+.visual-icons span:nth-child(2){animation-delay:.3s}.visual-icons span:nth-child(3){animation-delay:.6s}.visual-icons span:nth-child(4){animation-delay:.9s}
+.keyword-legend{font-size:11px;color:#68738b;font-weight:700}
+.kw{font-weight:900;text-decoration:underline;text-decoration-thickness:3px;text-decoration-color:#ffb52e;text-underline-offset:4px}
+.qtext{font-size:clamp(19px,2.1vw,25px);line-height:1.62;font-weight:800;margin:0 0 20px;color:#17203a}
+.formula{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-weight:800;white-space:nowrap}
+.chem sub,.chem sup,.formula sub,.formula sup{line-height:0;font-size:.68em}
+.options{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.opt{
+  position:relative;min-height:72px;border:2px solid #e9eaf5;border-radius:20px;background:#fff;color:#202941;
+  padding:13px 16px;text-align:left;cursor:pointer;display:flex;align-items:center;gap:13px;transition:.2s;overflow:hidden;
+  box-shadow:0 8px 20px rgba(55,49,130,.06)
+}
+.opt:hover:not(:disabled){transform:translateY(-3px);border-color:#9e95ff;box-shadow:0 14px 28px rgba(109,93,252,.13)}
+.opt:disabled{cursor:default}
+.opt-key{flex:0 0 38px;height:38px;border-radius:12px;display:grid;place-items:center;font-weight:900;color:#fff}
+.opt-a .opt-key{background:linear-gradient(135deg,#3cb8f3,#5b8ff7)}
+.opt-b .opt-key{background:linear-gradient(135deg,#35d99b,#22b98a)}
+.opt-c .opt-key{background:linear-gradient(135deg,#ffb347,#ff7c5c)}
+.opt-d .opt-key{background:linear-gradient(135deg,#ff73b4,#a76bff)}
+.opt-text{font-size:15px;line-height:1.45;font-weight:700}
+.opt.correct{border-color:#31c98b;background:linear-gradient(90deg,#e8fff5,#f8fffb);box-shadow:0 0 0 3px rgba(49,201,139,.1),0 14px 28px rgba(49,201,139,.13);animation:correctPop .3s ease}
+.opt.wrong{border-color:#ff6b73;background:#fff2f3;animation:shake .25s ease}
+@keyframes correctPop{50%{transform:scale(1.02)}}
+@keyframes shake{25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+.feedback{margin-top:16px;border-radius:19px;padding:16px 18px;display:none;line-height:1.65;border:1px solid transparent}
+.feedback.show{display:block;animation:fadeUp .28s ease}
+.feedback.good{background:#edfff7;border-color:#a7efcf;color:#175f44}.feedback.bad{background:#fff3f4;border-color:#ffc0c5;color:#7d2630}
+.feedback-title{font-size:17px;font-weight:900;margin-bottom:5px}
+.explain{margin-top:7px;padding-top:8px;border-top:1px dashed currentColor;opacity:.9}
+.actions{display:flex;justify-content:space-between;gap:10px;margin-top:18px;flex-wrap:wrap}
+.action-btn{border:0;border-radius:16px;padding:13px 18px;font-weight:900;cursor:pointer;transition:.2s}
+.next{color:#fff;background:linear-gradient(100deg,#20bff2,#6d5dfc);box-shadow:0 9px 22px rgba(109,93,252,.2)}
+.next:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}.next:not(:disabled):hover{transform:translateY(-2px) scale(1.01)}
+.restart{color:#5d6680;background:#f2f3f8}.restart:hover{background:#e9ebf4}
+.plus{position:fixed;z-index:30;pointer-events:none;font-weight:900;color:#10a86d;animation:scoreFloat 1s ease forwards;text-shadow:0 3px 8px rgba(16,168,109,.15)}
+@keyframes scoreFloat{to{transform:translateY(-70px) scale(1.2);opacity:0}}
+
+/* Result */
+.result{padding:32px;text-align:center;position:relative;overflow:hidden}
+.result h2{font-family:Poppins,sans-serif;font-size:clamp(34px,6vw,58px);margin:4px 0;background:linear-gradient(90deg,#22bdf2,#6d5dfc,#ee62aa);-webkit-background-clip:text;color:transparent}
+.result-score{font-family:Poppins,sans-serif;font-size:clamp(48px,8vw,78px);font-weight:900;color:#2c3450}
+.result-sub{color:#6d778e;font-weight:700}
+.result-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:24px 0}
+.result-stat{padding:16px 10px;border-radius:18px;background:#f7f7ff;border:1px solid #ececff}.result-stat b{display:block;font-size:22px}.result-stat span{font-size:11px;color:#7a8499;font-weight:800}
+.rank{display:inline-flex;align-items:center;gap:8px;padding:11px 16px;border-radius:999px;background:#fff7d9;color:#9a6500;font-weight:900}
+.review{margin-top:20px;text-align:left;display:grid;gap:8px}
+.review-item{background:#fff;border:1px solid #ebecf5;border-radius:15px;padding:12px 14px;line-height:1.55;font-size:13px}.review-item.ok{border-left:5px solid #32d583}.review-item.no{border-left:5px solid #ff6973}
+.review-answer{margin-top:4px;color:#5f6981;font-weight:700}
+.result-actions{justify-content:center}
+
+/* Modal */
+.modal-backdrop{position:fixed;inset:0;background:rgba(28,31,62,.35);backdrop-filter:blur(7px);z-index:50;display:grid;place-items:center;padding:18px}
+.modal{width:min(520px,100%);padding:25px;background:#fff;border-radius:25px;box-shadow:0 30px 80px rgba(25,24,75,.3)}
+.modal h3{margin:0 0 10px;font-family:Poppins,sans-serif}.modal p{color:#69748b;line-height:1.7}.modal-close{float:right;border:0;background:#f1f2f8;width:34px;height:34px;border-radius:10px;cursor:pointer}
+.toggle-row{display:flex;justify-content:space-between;align-items:center;padding:13px 0;border-bottom:1px solid #eef0f6;font-weight:800}
+.toggle{width:54px;height:30px;border:0;border-radius:99px;background:#d7dbea;padding:3px;cursor:pointer}.toggle i{display:block;width:24px;height:24px;border-radius:50%;background:#fff;transition:.2s;box-shadow:0 2px 5px #aaa}.toggle.on{background:#6d5dfc}.toggle.on i{transform:translateX(24px)}
+
+.confetti{position:fixed;z-index:60;width:9px;height:14px;top:-20px;pointer-events:none;animation:confettiFall 1.8s cubic-bezier(.15,.7,.3,1) forwards}
+@keyframes confettiFall{to{transform:translate(var(--x),110vh) rotate(720deg);opacity:0}}
+.empty-state{padding:15px;color:#68738b}
+
+@media(max-width:820px){
+  .start-grid{grid-template-columns:1fr}.hero-lab{min-height:240px}.big-flask{left:30%;font-size:85px}
+  .quiz-head{grid-template-columns:1fr}.hud{justify-content:flex-start}.result-grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:600px){
+  .app{width:min(96vw,560px);padding-top:12px}.start{padding:21px}.start h1{font-size:43px;letter-spacing:-1.5px}.start p{font-size:15px}
+  .hero-lab{min-height:210px}.big-flask{left:28%;top:27%;font-size:74px}.big-atom{font-size:55px}.tube-art{right:18%;height:82px;width:31px}.molecule-art{transform:scale(.75);transform-origin:left bottom;left:3%}
+  .question-card{padding:15px}.qtext{font-size:18px;line-height:1.58}.options{grid-template-columns:1fr}.opt{min-height:66px;border-radius:17px}.opt-text{font-size:14px}
+  .question-visual{min-height:58px;padding:7px 10px}.visual-icons{font-size:20px}.visual-icons span{width:33px;height:33px;border-radius:10px}.keyword-legend{font-size:9px}
+  .result{padding:22px 15px}.result-grid{gap:7px}.result-stat{padding:12px 7px}.result-stat b{font-size:19px}
+}
+</style>
+</head>
+<body>
+<div class="bg" aria-hidden="true">
+  <div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div>
+  <div class="particle p1"></div><div class="particle p2"></div><div class="particle p3"></div><div class="particle p4"></div>
+  <div class="science sci1">⚗</div><div class="science sci2">⚛</div><div class="science sci3">🧬</div><div class="science sci4">🔬</div>
+</div>
+
+<main class="app">
+  <div class="topbar">
+    <div class="brand"><div class="brand-mark">⚗</div><span>HÓA 12 · QUIZ LAB</span></div>
+    <button class="icon-btn" id="soundBtn" title="Bật/tắt âm thanh" aria-label="Bật/tắt âm thanh">🔊</button>
+  </div>
+
+  <section class="glass start" id="startScreen">
+    <div class="start-grid">
+      <div>
+        <span class="eyebrow">🧪 EDUCATIONAL QUIZ GAME</span>
+        <h1><span class="gradient-text">HÓA 12</span><br>Mix 3 đề</h1>
+        <p>Ôn tập 36 câu từ Lần 3 · Lần 4 · Lần 5 theo phong cách game. Trả lời nhanh, tạo combo và chinh phục phòng thí nghiệm!</p>
+        <div class="stat-pills">
+          <span class="pill">📚 36 câu</span><span class="pill">⏱ 20 giây/câu</span><span class="pill">🔥 Combo</span><span class="pill">💡 Giải thích</span>
+        </div>
+        <div class="start-actions">
+          <button class="primary" id="startBtn">▶ BẮT ĐẦU CHƠI</button>
+          <button class="secondary" id="guideBtn">❔ Hướng dẫn</button>
+          <button class="secondary" id="settingsBtn">⚙ Cài đặt</button>
+        </div>
+      </div>
+      <div class="hero-lab" aria-label="Minh họa phòng thí nghiệm">
+        <div class="lab-title">LAB LEVEL 01</div>
+        <div class="big-flask">⚗️</div><div class="big-atom">⚛</div>
+        <div class="tube-art"></div>
+        <div class="molecule-art"><i></i><i></i><i></i><i></i></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="quizScreen" class="hidden">
+    <div class="quiz-head">
+      <div>
+        <div class="question-count" id="questionCount">CÂU 01 / 36</div>
+        <div class="progress-wrap"><div class="progress" id="progress"></div></div>
+      </div>
+      <div class="hud">
+        <div class="hud-item">🏆 <span id="score">0</span></div>
+        <div class="hud-item combo">🔥 <span id="combo">COMBO ×0</span></div>
+        <div class="hud-item timer" id="timerBox">⏱ <span id="timer">20</span>s</div>
+      </div>
+    </div>
+
+    <section class="glass question-card" id="questionCard">
+      <div class="q-top">
+        <span class="badge" id="questionBadge">🧪 Câu 01</span>
+        <span class="source-badge" id="sourceBadge">Lần 3</span>
+      </div>
+      <div class="question-visual">
+        <div class="visual-icons" aria-hidden="true"><span>⚗️</span><span>🧪</span><span>⚛️</span><span>🔬</span></div>
+        <div class="keyword-legend">🔎 Keyword quan trọng được <u>gạch chân</u></div>
+      </div>
+      <h2 class="qtext" id="question"></h2>
+      <div class="options" id="options"></div>
+      <div class="feedback" id="feedback" aria-live="polite"></div>
+      <div class="actions">
+        <button class="action-btn restart" id="restart">↻ Chơi lại</button>
+        <button class="action-btn next" id="next" disabled>CÂU TIẾP →</button>
+      </div>
+    </section>
+  </section>
+
+  <section class="glass result hidden" id="resultScreen">
+    <div style="font-size:48px">🎉</div>
+    <h2>HOÀN THÀNH!</h2>
+    <div class="result-score" id="finalScore">0/36</div>
+    <div class="result-sub" id="finalText"></div>
+    <div class="result-grid">
+      <div class="result-stat"><b id="finalCorrect">0</b><span>✓ CÂU ĐÚNG</span></div>
+      <div class="result-stat"><b id="finalWrong">0</b><span>✕ CÂU SAI</span></div>
+      <div class="result-stat"><b id="finalBestCombo">×0</b><span>🔥 COMBO CAO NHẤT</span></div>
+      <div class="result-stat"><b id="finalPoints">0</b><span>⭐ ĐIỂM</span></div>
+    </div>
+    <div class="rank" id="rank">🏆 XẾP HẠNG: ĐANG TÍNH</div>
+    <div class="actions result-actions">
+      <button class="action-btn next" id="again">🔄 CHƠI LẠI</button>
+      <button class="action-btn restart" id="reviewBtn">📊 XEM ĐÁP ÁN</button>
+      <button class="action-btn restart" id="homeBtn">🏠 TRANG CHỦ</button>
+    </div>
+    <div class="review hidden" id="review"></div>
+  </section>
+</main>
+
+<div class="modal-backdrop hidden" id="modal">
+  <div class="modal">
+    <button class="modal-close" id="modalClose">×</button>
+    <h3 id="modalTitle">Hướng dẫn</h3>
+    <div id="modalBody"></div>
+  </div>
+</div>
+
+<script>
+const BANK = [{"test": "Lần 3", "q": "Các amino acid có khả năng di chuyển khác nhau trong …(1)… tuỳ thuộc vào …(2)… của môi trường và cấu tạo của amino acid. Nội dung phù hợp trong ô trống (1), (2) là:", "opts": ["A. điện trường, nồng độ", "B. dung dịch, nồng độ", "C. dung dịch, pH", "D. điện trường, pH"], "a": 3, "exp": "Điện di amino acid phụ thuộc vào điện trường và điện tích của amino acid, mà điện tích phụ thuộc pH môi trường."}, {"test": "Lần 3", "q": "Loại dầu mỡ nào không thuộc họ lipid?", "opts": ["A. Dầu diesel", "B. Mỡ động vật", "C. Dầu thực vật", "D. Dầu cá"], "a": 0, "exp": "Dầu diesel là hỗn hợp hydrocarbon, không phải lipid."}, {"test": "Lần 3", "q": "Chất nào sau đây là chất giặt rửa tổng hợp?", "opts": ["A. C17H35COONa", "B. C17H33COOCH3", "C. p-C11H23-C6H4-SO3Na", "D. C17H33COOK"], "a": 2, "exp": "Muối alkylbenzene sulfonate là chất giặt rửa tổng hợp."}, {"test": "Lần 3", "q": "Chất nào sau đây tác dụng với HNO2 giải phóng khí nitrogen?", "opts": ["A. (CH3)3N", "B. C6H5NHCH3", "C. (CH3)2NH", "D. C2H5NH2"], "a": 3, "exp": "Alkylamine bậc I phản ứng với HNO2 tạo alcohol và giải phóng N2."}, {"test": "Lần 3", "q": "Tên các phản ứng (3), (2), (1) trong quá trình CO2 → tinh bột → glucose → C2H5OH lần lượt là:", "opts": ["A. trùng hợp, quang hợp, lên men", "B. quang hợp, thủy phân, lên men", "C. lên men, thủy phân, quang hợp", "D. lên men, quang hợp, thủy phân"], "a": 2, "exp": "Glucose → ethanol là lên men; tinh bột → glucose là thủy phân; CO2 → tinh bột là quang hợp."}, {"test": "Lần 3", "q": "Trong bảng thí nghiệm: T làm quỳ tím hóa xanh; Y cho phản ứng Tollens; X, Y, T tạo dung dịch xanh lam với Cu(OH)2; Z tạo kết tủa trắng với nước bromine. X, Y, Z, T lần lượt là:", "opts": ["A. Ethylamine, glucose, saccharose, aniline", "B. Saccharose, glucose, aniline, ethylamine", "C. Aniline, ethylamine, saccharose, glucose", "D. Saccharose, aniline, glucose, ethylamine"], "a": 0, "exp": "T là ethylamine; Y là glucose; Z là aniline; X là saccharose."}, {"test": "Lần 3", "q": "Phương trình nào sau đây không thể hiện tính base của amine?", "opts": ["A. CH3NH2 + HNO2 → CH3OH + N2 + H2O", "B. CH3NH2 + H2O ⇌ CH3NH3+ + OH−", "C. CH3NH2 + HCl → CH3NH3Cl", "D. CH3NH2 + H2O ⇌ CH3NH3+ + OH−"], "a": 0, "exp": "Phản ứng với HNO2 là phản ứng đặc trưng của amine bậc I, không phải biểu hiện tính base."}, {"test": "Lần 3", "q": "Giấm ăn có thể sản xuất bằng cách cho giấm cái vào dung dịch ethyl alcohol loãng. Hệ nào kém thuận lợi nhất cho quá trình lên men?", "opts": ["A. Hệ (2)", "B. Hệ (4)", "C. Hệ (1)", "D. Hệ (3)"], "a": 0, "exp": "Đáp án theo đề: hệ (2). Câu này phụ thuộc sơ đồ thí nghiệm của đề."}, {"test": "Lần 3", "q": "Một mẫu glucose 25 mL được chuẩn độ bằng KMnO4 0,03 M, hết 25 mL. Theo 24MnO4− + 5C6H12O6 + 72H+ → ..., nồng độ mol glucose là:", "opts": ["A. 0,0075 M", "B. 0,005 M", "C. 0,01 M", "D. 0,00625 M"], "a": 3, "exp": "n(KMnO4)=0,03×0,025=0,00075 mol. n(glucose)=5/24×0,00075=0,00015625 mol. Chia 0,025 L được 0,00625 M."}, {"test": "Lần 3", "q": "Dầu diesel thuộc nhóm nào trong các lựa chọn sau?", "opts": ["A. Lipid", "B. Carbohydrate", "C. Hỗn hợp hydrocarbon", "D. Protein"], "a": 2, "exp": "Dầu diesel là hỗn hợp các hydrocarbon thu được từ dầu mỏ."}, {"test": "Lần 3", "q": "Carbohydrate nào có thể làm mất màu nước bromine?", "opts": ["A. Cellulose", "B. Fructose", "C. Glucose", "D. Saccharose"], "a": 2, "exp": "Glucose có nhóm aldehyde ở dạng mạch hở và bị nước bromine oxi hóa."}, {"test": "Lần 3", "q": "Phản ứng CO2 → tinh bột là phản ứng nào?", "opts": ["A. Lên men", "B. Thủy phân", "C. Quang hợp", "D. Xà phòng hóa"], "a": 2, "exp": "Cây xanh tổng hợp carbohydrate từ CO2 và H2O nhờ quang hợp."}, {"test": "Lần 4", "q": "Trong các chất dưới đây, chất nào là amine khí bậc III?", "opts": ["A. (C2H5)3N", "B. CH3NHCH3", "C. C6H5NH2", "D. (CH3)3N"], "a": 3, "exp": "(CH3)3N là trimethylamine, amine bậc III và ở trạng thái khí."}, {"test": "Lần 4", "q": "Hợp chất CH3[CH2]14COO[CH2]29CH3 có trong sáp ong thuộc loại hợp chất nào?", "opts": ["A. Protein", "B. Ester", "C. Chất béo", "D. Carbohydrate"], "a": 1, "exp": "Đây là ester tạo bởi acid béo và alcohol mạch dài, là thành phần sáp ong."}, {"test": "Lần 4", "q": "Carbohydrate nào sau đây làm mất màu nước bromine?", "opts": ["A. Cellulose", "B. Fructose", "C. Glucose", "D. Saccharose"], "a": 2, "exp": "Glucose phản ứng với nước bromine do có dạng mạch hở chứa nhóm aldehyde."}, {"test": "Lần 4", "q": "Tác nhân nào sau đây là tác nhân electrophile?", "opts": ["A. NO2+", "B. H2O", "C. C2H5OH", "D. CN−"], "a": 0, "exp": "NO2+ thiếu electron và nhận cặp electron, nên là electrophile."}, {"test": "Lần 4", "q": "Chất nào được coi là chất giặt rửa tổng hợp?", "opts": ["A. CH3[CH2]16COONa", "B. CH3[CH2]7-CH=CH[CH2]7COONa", "C. CH3[CH2]12CH2NH3Cl", "D. CH3[CH2]10CH2OSO3Na"], "a": 3, "exp": "Muối alkyl sulfate là chất giặt rửa tổng hợp."}, {"test": "Lần 4", "q": "Phản ứng phân cắt liên kết C–C của alkane mạch dài tạo hydrocarbon mạch ngắn hơn gọi là:", "opts": ["A. Cháy", "B. Reforming", "C. Cracking", "D. Thế"], "a": 2, "exp": "Cracking là quá trình bẻ gãy mạch carbon của hydrocarbon mạch dài."}, {"test": "Lần 4", "q": "Ở điều kiện thường, chất nào sau đây ở trạng thái rắn?", "opts": ["A. Dimethylamine", "B. Glycine", "C. Ethylamine", "D. Ethanol"], "a": 1, "exp": "Glycine là chất rắn ở điều kiện thường; các chất còn lại trong lựa chọn là chất khí hoặc chất lỏng."}, {"test": "Lần 4", "q": "Amine nào là alkylamine phản ứng với nitrous acid tạo thành khí nitrogen?", "opts": ["A. Methylamine", "B. Dimethylamine", "C. Aniline", "D. Trimethylamine"], "a": 0, "exp": "Methylamine là amine bậc I và giải phóng N2 với HNO2."}, {"test": "Lần 4", "q": "Ở điều kiện thường, carbohydrate nào sau đây không hòa tan được Cu(OH)2?", "opts": ["A. Saccharose", "B. Fructose", "C. Glucose", "D. Cellulose"], "a": 3, "exp": "Cellulose không tan trong nước và không tạo dung dịch xanh lam với Cu(OH)2 như glucose/fructose/saccharose."}, {"test": "Lần 4", "q": "Chất rắn X vị ngọt, dễ tan trong nước, có nhiều trong quả chín. Oxi hóa X bằng nước bromine thu được Y. X và Y là:", "opts": ["A. Fructose và gluconic acid", "B. Glucose và gluconic acid", "C. Glucose và ammonium gluconate", "D. Saccharose và glucose"], "a": 1, "exp": "Glucose bị nước bromine oxi hóa nhóm –CHO thành –COOH, tạo gluconic acid."}, {"test": "Lần 4", "q": "Thêm methylamine dư vào dung dịch Fe3+ đến khi phản ứng hoàn toàn thu được:", "opts": ["A. Kết tủa đỏ nâu", "B. Dung dịch vàng nâu", "C. Kết tủa vàng nâu", "D. Dung dịch đỏ nâu"], "a": 0, "exp": "Methylamine tạo OH− trong nước; Fe3+ + 3OH− → Fe(OH)3 kết tủa đỏ nâu."}, {"test": "Lần 4", "q": "Nguyên liệu phù hợp để sản xuất xi măng Portland theo sơ đồ là:", "opts": ["A. X: Đá vôi; Y: Đất sét; Z: Thạch cao", "B. X: Sođa; Y: Đá vôi; Z: Quặng sắt", "C. X: Đất sét; Y: Than đá; Z: Đá vôi", "D. X: Đá vôi; Y: Sođa; Z: Than đá"], "a": 0, "exp": "Sản xuất xi măng Portland dùng đá vôi và đất sét; nghiền clinker với thạch cao."}, {"test": "Lần 5", "q": "Công thức nào biểu diễn đúng nhất trạng thái tồn tại chủ yếu của glycine ở pH = 4?", "opts": ["A. +NH3CH2COOH", "B. NH2CH2COOH", "C. +NH3CH2COO−", "D. NH2CH2COO−"], "a": 0, "exp": "Ở pH 4, glycine nằm chủ yếu ở dạng cation gần điểm đẳng điện nhưng pH vẫn dưới pI: +NH3CH2COOH."}, {"test": "Lần 5", "q": "Chất nào phản ứng với nitrous acid ở nhiệt độ thấp tạo muối diazonium?", "opts": ["A. Propylamine", "B. Alanine", "C. Aniline", "D. Methylamine"], "a": 2, "exp": "Aniline (amine thơm bậc I) tạo muối diazonium với HNO2 ở nhiệt độ thấp."}, {"test": "Lần 5", "q": "Giả sử 1 gam tinh bột cung cấp 17 kJ và năng lượng từ tinh bột chiếm 60% tổng năng lượng. Một học sinh cần 9180 kJ/ngày. Cần bao nhiêu gam tinh bột?", "opts": ["A. 675 g", "B. 324 g", "C. 540 g", "D. 450 g"], "a": 1, "exp": "Năng lượng từ tinh bột = 9180×0,60=5508 kJ. Khối lượng = 5508/17=324 g."}, {"test": "Lần 5", "q": "Trong các tiểu phân (CH3)3C+, (CH3)2C−H, •CH3 và (CH3)2C+H có bao nhiêu carbocation?", "opts": ["A. 2", "B. 3", "C. 1", "D. 4"], "a": 0, "exp": "Có 2 tiểu phân mang điện dương trên carbon: (CH3)3C+ và (CH3)2C+H."}, {"test": "Lần 5", "q": "Ba hợp chất thơm X, Y, Z đều C7H8O. X tác dụng với Na và NaOH; Y tác dụng với Na nhưng không với NaOH; Z không tác dụng với Na và NaOH. X, Y, Z lần lượt là:", "opts": ["A. C6H4(CH3)OH; C6H5OCH3; C6H5CH2OH", "B. C6H5CH2OH; C6H5OCH3; C6H4(CH3)OH", "C. C6H5OCH3; C6H5CH2OH; C6H4(CH3)OH", "D. C6H4(CH3)OH; C6H5CH2OH; C6H5OCH3"], "a": 3, "exp": "Phenol phản ứng với NaOH và Na; benzyl alcohol phản ứng với Na; anisole không phản ứng với Na/NaOH."}, {"test": "Lần 5", "q": "Phát biểu nào không đúng về α-terpineol?", "opts": ["A. Là alcohol bậc 3", "B. Là hợp chất thơm", "C. Tác dụng được với dung dịch Br2", "D. Công thức phân tử C10H18O"], "a": 1, "exp": "α-terpineol có vòng không no nhưng không phải hợp chất thơm (không phải aromatic)."}, {"test": "Lần 5", "q": "Phát biểu sai về leucine là:", "opts": ["A. Leucine có CTPT C6H13O2N", "B. Leucine là hợp chất hữu cơ tạp chức", "C. Leucine là amino acid thiết yếu", "D. Ở pH = 2, leucine tồn tại dạng anion và di chuyển về cực dương"], "a": 3, "exp": "Ở pH thấp, nhóm amino bị proton hóa; leucine chủ yếu mang điện dương, không phải anion."}, {"test": "Lần 5", "q": "Y là triester mạch hở tạo bởi một carboxylic acid đơn chức X và glycerol. Trong Y, số C gấp 1,5 lần số O. Thủy phân m gam Y cần 450 mL NaOH 1 M. m bằng:", "opts": ["A. 21,8 g", "B. 17,6 g", "C. 65,4 g", "D. 32,7 g"], "a": 3, "exp": "Y có O6 nên C9. Acid là CH3COOH, Y là triacetin C9H14O6, M=218. n(Y)=0,45/3=0,15 mol → m=32,7 g."}, {"test": "Lần 5", "q": "Chỉ số xà phòng hóa là số mg KOH cần để trung hòa acid tự do và xà phòng hóa hết ester trong:", "opts": ["A. 1 gam chất béo", "B. 10 gam chất béo", "C. 100 gam chất béo", "D. 1 mol chất béo"], "a": 0, "exp": "Đây chính là định nghĩa của chỉ số xà phòng hóa."}, {"test": "Lần 5", "q": "Một tấn rỉ đường chứa 910 kg saccharose. Lên men thành ethanol với hiệu suất 85%, ethanol có khối lượng riêng 0,8 kg/L. Thể tích ethanol thu được xấp xỉ:", "opts": ["A. 442 L", "B. 490 L", "C. 520 L", "D. 650 L"], "a": 2, "exp": "910/342×4×46×0,85 = 416,15 kg ethanol; V≈416,15/0,8=520,2 L."}, {"test": "Lần 5", "q": "Chất nào sau đây là arylamine?", "opts": ["A. Một amine có nhóm NH2 gắn trực tiếp vào vòng benzene", "B. Một amine có NH2 gắn vào carbon no", "C. Một amide", "D. Một alcohol"], "a": 0, "exp": "Arylamine là amine có nguyên tử N của nhóm amino gắn trực tiếp với carbon của hệ vòng thơm."}, {"test": "Lần 5", "q": "Ở pH = 4, dạng tồn tại chủ yếu của glycine là dạng nào?", "opts": ["A. Cation +NH3CH2COOH", "B. Anion NH2CH2COO−", "C. Trung hòa NH2CH2COOH", "D. Dianion"], "a": 0, "exp": "Trong môi trường acid, glycine bị proton hóa ở nhóm carboxylate; dạng cation chiếm ưu thế dưới pI."}];
+const TOTAL = BANK.length;
+const TIME_LIMIT = 20;
+let questions = [], current = 0, points = 0, correct = 0, combo = 0, bestCombo = 0;
+let answered = false, timerId = null, timeLeft = TIME_LIMIT, soundOn = true;
+let results = [];
+
+const $ = id => document.getElementById(id);
+
+function shuffle(arr){
+  const a = [...arr];
+  for(let n=a.length-1;n>0;n--){const j=Math.floor(Math.random()*(n+1));[a[n],a[j]]=[a[j],a[n]]}
+  return a;
+}
+function escapeHTML(s){
+  return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
+}
+
+/* Preserve source wording while rendering chemistry/math notation correctly. */
+function formatScience(raw){
+  let s=escapeHTML(raw);
+
+  // charges and common superscripts; applied before subscripts.
+  s=s.replace(/([A-Za-z0-9)\]])(\d+)([+\-−])/g,'$1<sup>$2$3</sup>');
+  s=s.replace(/([A-Za-z)])([+\-−])/g,'$1<sup>$2</sup>');
+
+  // chemical formulas: element/closing-parenthesis followed by a number.
+  s=s.replace(/([A-Z][a-z]?|\))(\d+)/g,'$1<sub>$2</sub>');
+
+  // mathematical powers/subscripts in plain text.
+  s=s.replace(/\^(\d+|[+\-−])/g,'<sup>$1</sup>');
+  s=s.replace(/_([0-9]+)/g,'<sub>$1</sub>');
+
+  return '<span class="chem">'+s+'</span>';
+}
+
+function highlightKeywords(raw){
+  let s=formatScience(raw);
+  const patterns=[
+    /không đúng/gi,/phát biểu sai/gi,/không hòa tan/gi,/không thuộc/gi,
+    /làm mất màu/gi,/tác dụng với/gi,/phản ứng với/gi,/tạo thành/gi,
+    /chủ yếu/gi,/điều kiện thường/gi,/nhiệt độ thấp/gi,/hiệu suất/gi,
+    /vừa đủ/gi,/cần dùng/gi,/giá trị/gi,/xác định/gi,/bao nhiêu/gi,
+    /amino acid/gi,/amine/gi,/carbohydrate/gi,/glucose/gi,/ethanol/gi,
+    /HNO2/g,/NaOH/g,/NaHCO3/g,/Cu\(OH\)2/g,/Br2/g,/KMnO4/g
+  ];
+  patterns.forEach(re=>s=s.replace(re,m=>'<span class="kw">'+m+'</span>'));
+  return s;
+}
+
+function playTone(type){
+  if(!soundOn) return;
+  try{
+    const C=window.AudioContext||window.webkitAudioContext;
+    if(!C)return;
+    const ctx=new C(), o=ctx.createOscillator(), g=ctx.createGain();
+    const cfg={click:[520,.05,'sine'],correct:[740,.11,'sine'],wrong:[180,.13,'sawtooth'],combo:[920,.16,'triangle'],win:[660,.35,'sine'],timeout:[220,.2,'square']}[type]||[440,.06,'sine'];
+    o.frequency.value=cfg[0];o.type=cfg[2];g.gain.setValueAtTime(.0001,ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(.06,ctx.currentTime+.01);
+    g.gain.exponentialRampToValueAtTime(.0001,ctx.currentTime+cfg[1]);
+    o.connect(g);g.connect(ctx.destination);o.start();o.stop(ctx.currentTime+cfg[1]+.02);
+    setTimeout(()=>ctx.close(),500);
+  }catch(e){}
+}
+
+function ripple(e){
+  const b=e.currentTarget, r=document.createElement('span'), rect=b.getBoundingClientRect();
+  const size=Math.max(rect.width,rect.height);
+  r.className='ripple';r.style.width=r.style.height=size+'px';
+  r.style.left=(e.clientX-rect.left-size/2)+'px';r.style.top=(e.clientY-rect.top-size/2)+'px';
+  b.appendChild(r);setTimeout(()=>r.remove(),600);
+}
+document.querySelectorAll('.primary,.secondary').forEach(b=>b.addEventListener('click',ripple));
+
+function startGame(){
+  questions=shuffle(BANK);current=0;points=0;correct=0;combo=0;bestCombo=0;results=[];
+  $('startScreen').classList.add('hidden');$('resultScreen').classList.add('hidden');$('quizScreen').classList.remove('hidden');
+  renderQuestion();playTone('click');
+}
+
+function renderQuestion(){
+  clearInterval(timerId);answered=false;timeLeft=TIME_LIMIT;
+  const item=questions[current];
+  $('questionCount').textContent=`CÂU ${String(current+1).padStart(2,'0')} / ${TOTAL}`;
+  $('progress').style.width=((current)/TOTAL*100)+'%';
+  $('score').textContent=points;
+  $('combo').textContent=`COMBO ×${combo}`;
+  $('timer').textContent=timeLeft;$('timerBox').classList.remove('danger');
+  $('questionBadge').textContent=`🧪 Câu ${String(current+1).padStart(2,'0')}`;
+  $('sourceBadge').textContent=item.test;
+  $('question').innerHTML=highlightKeywords(item.q);
+  $('options').innerHTML='';
+  $('feedback').className='feedback';$('feedback').innerHTML='';
+  $('next').disabled=true;
+
+  item.opts.forEach((txt,k)=>{
+    const b=document.createElement('button');b.type='button';b.className='opt opt-'+String.fromCharCode(97+k);
+    b.innerHTML='<span class="opt-key">'+String.fromCharCode(65+k)+'</span><span class="opt-text">'+formatScience(txt)+'</span>';
+    b.addEventListener('click',()=>choose(k,b));$('options').appendChild(b);
+  });
+  $('questionCard').classList.remove('enter');void $('questionCard').offsetWidth;$('questionCard').classList.add('enter');
+  startTimer();
+}
+
+function startTimer(){
+  timerId=setInterval(()=>{
+    if(answered)return;
+    timeLeft--; $('timer').textContent=timeLeft;
+    if(timeLeft<=5)$('timerBox').classList.add('danger');
+    if(timeLeft<=0){clearInterval(timerId);choose(-1,null,true)}
+  },1000);
+}
+
+function showPoints(text, color='#10a86d'){
+  const el=document.createElement('div');el.className='plus';el.textContent=text;el.style.color=color;
+  el.style.left=(window.innerWidth/2-35)+'px';el.style.top='35%';document.body.appendChild(el);setTimeout(()=>el.remove(),1000);
+}
+
+function choose(k,clicked,timedOut=false){
+  if(answered)return;
+  answered=true;clearInterval(timerId);
+  const item=questions[current], buttons=[...document.querySelectorAll('.opt')];
+  buttons.forEach(b=>b.disabled=true);
+  buttons[item.a].classList.add('correct');
+  const ok=k===item.a && !timedOut;
+  if(ok){
+    correct++;combo++;bestCombo=Math.max(bestCombo,combo);
+    const speedBonus=Math.max(0,(timeLeft-10)*5);
+    const earned=100+combo*25+speedBonus;
+    points+=earned;showPoints('+'+earned);
+    playTone(combo>=3?'combo':'correct');
+    if(combo>=2)confetti(12);
+  }else{
+    combo=0;
+    if(timedOut){playTone('timeout');showPoints('HẾT GIỜ','#e43e51')}
+    else{clicked.classList.add('wrong');playTone('wrong')}
+  }
+  results.push({item,ok,timedOut,user:k});
+  $('score').textContent=points;$('combo').textContent=`COMBO ×${combo}`;
+  $('progress').style.width=(((current+1)/TOTAL)*100)+'%';
+  const f=$('feedback');f.className='feedback show '+(ok?'good':'bad');
+  const title=ok?'✓ CHÍNH XÁC!':'✕ '+(timedOut?'HẾT GIỜ':'CHƯA CHÍNH XÁC');
+  const bonus=ok?`<br><b>⭐ +${100+combo*25+Math.max(0,(timeLeft-10)*5)} điểm</b>${combo>=2?' · 🔥 COMBO ×'+combo:''}`:'';
+  f.innerHTML=`<div class="feedback-title">${title}</div><div>🎯 <b>Đáp án đúng:</b> ${formatScience(item.opts[item.a])}${bonus}</div><div class="explain">💡 <b>Giải thích:</b> ${formatScience(item.exp)}</div>`;
+  $('next').disabled=false;
+  if(current===TOTAL-1)$('next').textContent='🏆 XEM KẾT QUẢ';
+}
+
+function nextQuestion(){
+  if(!answered)return;
+  if(current<TOTAL-1){current++;$('next').textContent='CÂU TIẾP →';renderQuestion()}
+  else finishGame();
+}
+
+function finishGame(){
+  clearInterval(timerId);
+  $('quizScreen').classList.add('hidden');$('resultScreen').classList.remove('hidden');
+  const pct=Math.round(correct/TOTAL*100), wrong=TOTAL-correct;
+  $('finalScore').textContent=`${correct}/${TOTAL}`;
+  $('finalCorrect').textContent=correct;$('finalWrong').textContent=wrong;
+  $('finalBestCombo').textContent='×'+bestCombo;$('finalPoints').textContent=points;
+  $('finalText').textContent=`Bạn đạt ${pct}% — ${pct>=90?'Kiến thức rất chắc!':pct>=75?'Rất tốt! Tiếp tục giữ phong độ!':pct>=50?'Khá ổn! Hãy luyện thêm các câu sai.':'Đừng nản! Xem lại giải thích và thử lại nhé!'}`;
+  $('rank').textContent='🏆 XẾP HẠNG: '+(pct>=90?'XUẤT SẮC':pct>=75?'RẤT TỐT':pct>=50?'KHÁ':'CẦN LUYỆN THÊM');
+  $('progress').style.width='100%';confetti(60);playTone('win');
+}
+
+function buildReview(){
+  const box=$('review');
+  box.innerHTML='';
+  results.forEach((r,n)=>{
+    const d=document.createElement('div');d.className='review-item '+(r.ok?'ok':'no');
+    d.innerHTML=`<b>${r.ok?'✓':'✕'} Câu ${n+1} · ${r.item.test}</b><br>${highlightKeywords(r.item.q)}
+      <div class="review-answer">🎯 Đáp án: ${formatScience(r.item.opts[r.item.a])}</div>
+      <div class="review-answer">💡 ${formatScience(r.item.exp)}</div>`;
+    box.appendChild(d);
+  });
+}
+
+function confetti(count=30){
+  const colors=['#39bdf8','#7967ff','#ff6fb5','#ffd65a','#32d583','#ff9f43'];
+  for(let n=0;n<count;n++){
+    const c=document.createElement('i');c.className='confetti';c.style.left=Math.random()*100+'vw';
+    c.style.background=colors[Math.floor(Math.random()*colors.length)];
+    c.style.setProperty('--x',(Math.random()*260-130)+'px');
+    c.style.animationDelay=(Math.random()*.35)+'s';c.style.transform=`rotate(${Math.random()*180}deg)`;
+    document.body.appendChild(c);setTimeout(()=>c.remove(),2200);
+  }
+}
+
+function openModal(title,body){$('modalTitle').textContent=title;$('modalBody').innerHTML=body;$('modal').classList.remove('hidden')}
+function closeModal(){$('modal').classList.add('hidden')}
+
+$('startBtn').addEventListener('click',startGame);
+$('restart').addEventListener('click',startGame);
+$('again').addEventListener('click',startGame);
+$('next').addEventListener('click',nextQuestion);
+$('reviewBtn').addEventListener('click',()=>{buildReview();$('review').classList.toggle('hidden');$('reviewBtn').textContent=$('review').classList.contains('hidden')?'📊 XEM ĐÁP ÁN':'📊 ẨN ĐÁP ÁN'});
+$('homeBtn').addEventListener('click',()=>{$('resultScreen').classList.add('hidden');$('startScreen').classList.remove('hidden')});
+$('guideBtn').addEventListener('click',()=>openModal('❔ HƯỚNG DẪN',`
+  <p><b>1.</b> Mỗi câu có <b>20 giây</b>. Chọn A/B/C/D trước khi hết giờ.</p>
+  <p><b>2.</b> Trả lời đúng liên tiếp để tăng <b>🔥 COMBO</b> và nhận thêm điểm.</p>
+  <p><b>3.</b> Sau mỗi câu, game hiển thị đáp án đúng và giải thích.</p>
+  <p><b>4.</b> Cuối game, chọn <b>📊 XEM ĐÁP ÁN</b> để xem lại toàn bộ.</p>
+  <p>💡 Keyword quan trọng được gạch chân; công thức được hiển thị với chỉ số dưới/số mũ bằng HTML.</p>`));
+$('settingsBtn').addEventListener('click',()=>openModal('⚙ CÀI ĐẶT',`
+  <div class="toggle-row"><span>🔊 Âm thanh</span><button class="toggle ${soundOn?'on':''}" id="soundToggle"><i></i></button></div>
+  <p style="margin-bottom:0">Âm thanh chỉ phát sau khi bạn tương tác với game, phù hợp với trình duyệt hiện đại.</p>`));
+$('modal').addEventListener('click',e=>{if(e.target===$('modal'))closeModal()});
+$('modalClose').addEventListener('click',closeModal);
+$('soundBtn').addEventListener('click',()=>{soundOn=!soundOn;$('soundBtn').textContent=soundOn?'🔊':'🔇';playTone('click')});
+document.addEventListener('click',e=>{
+  if(e.target.id==='soundToggle'){
+    soundOn=!soundOn;$('soundToggle').classList.toggle('on',soundOn);$('soundBtn').textContent=soundOn?'🔊':'🔇';
+  }
+});
+</script>
+</body>
+</html>
